@@ -9,6 +9,8 @@ import Product from './pages/Product'
 import PlaceOrder from './pages/PlaceOrder'
 import Cart from './pages/Cart'
 import Orders from './pages/Orders'
+import Navbar from './components/Navbar'
+import Login from './pages/Login'
 
 
 function App() {
@@ -16,6 +18,7 @@ function App() {
 
   return (
     <>
+      <Navbar />
       <Routes>
           <Route path='/' element={<Home />}></Route>
           <Route path='/collection' element={<Collection />}></Route>
