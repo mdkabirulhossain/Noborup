@@ -1,1 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Outfit:wght@100..900&family=Prata&display=swap');
 @import "tailwindcss";
+
+
+*{
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.prata-regular {
+  font-family: "Prata", serif;
+  font-weight: 400;
+  font-style: normal;
+}
