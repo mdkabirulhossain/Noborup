@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { ShopContext } from '../context/ShopContext';
 import { FaStar } from 'react-icons/fa6';
+import RelatedProducts from '../components/RelatedProducts';
 
 const Product = () => {
     
@@ -93,7 +94,7 @@ const Product = () => {
             </div>
 
             {/* Related Product  */}
-            {/* <RelatedProduct category={productData.category} subCategory={productData.subCategory}></RelatedProduct> */}
+            <RelatedProducts categroy={productData.categroy} subCategory={productData.subCategory} />
         </div> 
     ) : <div className='opacity-0'>
 
