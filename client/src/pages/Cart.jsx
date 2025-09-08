@@ -5,6 +5,7 @@ import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import { Link } from 'react-router';
 import { products } from '../assets/assets';
+import CartTotal from '../components/CartTotal';
 
 const Cart = () => {
     const { product_items, currency, cartItem, updateQuantity, navigate } = useContext(ShopContext);
@@ -40,7 +41,7 @@ const Cart = () => {
                         const productData = products.find(product => product._id === item._id);
 
                         return (
-                            <div key={item._id} >
+                            <div key={item.id} >
 
                                 <div className='flex justify-between items-center gap-5 '>
                                     <div className='flex gap-5'>
@@ -75,7 +76,7 @@ const Cart = () => {
             </div>
             <div className='flex justify-end my-20'>
                 <div className='w-full sm:w-[450px]'>
-                    {/* <CartTotal></CartTotal> */}
+                    <CartTotal />
                     <div className="w-full text-end">
                         <Link to={'/PlaceOrder'}> <button className='bg-black text-white text-sm my-8 px-8 py-3'>PROCED TO CHECKOUT</button></Link>
                     </div>
