@@ -14,6 +14,7 @@ import Login from './pages/Login'
 import Footer from './components/Footer'
 import Search from './components/Search'
 import { ToastContainer, toast } from 'react-toastify';
+import Signup from './pages/Signup'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
           <Route path='/placeorder' element={<PlaceOrder />} />
           <Route path='/order' element={<Orders />} />
           <Route path='/cart' element={<Cart />}/>
