@@ -67,9 +67,9 @@ const Signup = () => {
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex justify-between items-center relative'>
                                 <input type={showPassword? "text" : 'password'} placeholder="password" onChange={onChangeHandler} name='password' value={data.password} className="border py-1 pl-2 rounded-md input-bordered w-full outline-none" required />
-                                <div className='absolute right-10 cursor-pointer' >
+                                <div className='absolute right-2 cursor-pointer' >
                                    {
                                     showPassword? 
                                     <FaEyeSlash onClick={()=>setShowPassword(false)}/>
@@ -86,9 +86,9 @@ const Signup = () => {
                             <label className="label">
                                 <span className="label-text">Confirm Password</span>
                             </label>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex justify-between items-center relative'>
                                 <input type={showConfirmPassword? "text" : 'password'} placeholder="confirm password" onChange={onChangeHandler} name='confirmPassword' value={data.confirmPassword} className="border py-1 pl-2 rounded-md input-bordered w-full outline-none" required />
-                                <div className='absolute right-10 cursor-pointer' >
+                                <div className='absolute right-2 cursor-pointer' >
                                    {
                                     showConfirmPassword? 
                                     <FaEyeSlash onClick={()=>setShowConfirmPassword(false)}/>
