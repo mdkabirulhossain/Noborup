@@ -8,3 +8,8 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.active{
+  background-color: #ffebf5;
+  border-color: #C586A5;
+}
