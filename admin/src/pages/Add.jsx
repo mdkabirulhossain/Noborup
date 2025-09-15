@@ -36,7 +36,7 @@ const Add = ({ token }) => {
             image3 && formdata.append("image3", image3);
             image4 && formdata.append("image4", image4);
 
-            // Log all FormData
+           // Log all FormData
             // for (let [key, value] of formdata.entries()) {
             //     console.log(`${key}:`, value);
             // }
@@ -48,8 +48,6 @@ const Add = ({ token }) => {
                 setName('');
                 setDescription('');
                 setPrice('');
-                setCategory('');
-                setSubCategory('');
                 setBestseller(false);
                 setSizes([]);
 
