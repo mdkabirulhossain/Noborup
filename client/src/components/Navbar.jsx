@@ -5,13 +5,13 @@ import '../components/Navbar.css'
 import { ShopContext } from '../context/ShopContext';
 
 const Navbar = () => {
-    const {showSearch, setShowSearch, getCartCount, setCartItem,token, navigate, setToken} = useContext(ShopContext);
+    const { showSearch, setShowSearch, getCartCount, setCartItem, token, navigate, setToken } = useContext(ShopContext);
     const [visible, setVisible] = useState(false);
 
-    const logout = () =>{
-        
+    const logout = () => {
+
         localStorage.removeItem('token');
-        setToken('');   
+        setToken('');
         navigate('/login');
         setCartItem({});
     }
@@ -54,17 +54,19 @@ const Navbar = () => {
 
             {/* Profiel and cart div  */}
             <div className='flex items-center gap-6'>
-                <img onClick={()=>setShowSearch(true)} src={assets.search_icon} alt="search" className='w-5 cursor-pointer' />
+                <img onClick={() => setShowSearch(true)} src={assets.search_icon} alt="search" className='w-5 cursor-pointer' />
 
                 <div className='group relative'>
-                    <Link to={'/login'}><img src={assets.profile_icon} alt="profile" className='w-5 cursor-pointer' /></Link>
-                    <div className='hidden group-hover:block absolute right-0 pt-4 bg-white shadow-md rounded'>
-                        <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
-                            <p className='cursor-pointer hover:text-black'>My Profile</p>
-                            <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
-                            <p onClick={logout} className='cursor-pointer hover:block'>Logout</p>
+                    <img onClick={()=> token? null : navigate('/login')} src={assets.profile_icon} alt="profile" className='w-5 cursor-pointer' />
+                    {
+                        token && <div className='hidden group-hover:block absolute right-0 pt-4 bg-white shadow-md rounded'>
+                            <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
+                                <p className='cursor-pointer hover:text-black'>My Profile</p>
+                                <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
+                                <p onClick={logout} className='cursor-pointer hover:block'>Logout</p>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
 
                 <Link to='/cart' className='relative'>
