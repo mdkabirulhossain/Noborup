@@ -44,38 +44,29 @@ const Collection = () => {
             productsCopy = productsCopy.filter(item => subCategory.includes(item.subCategory));
         }
 
+        // Apply sorting to the filtered products
+        productsCopy = sortProducts(productsCopy);
         setFilterProducts(productsCopy);
     }
-   
-    //   After apply Filter function not needed this 
-    // useEffect(()=>{
-    //     setFilterProducts(products)
-    // }, [])
 
-    const sortProduct = () =>{
-        let filterProductsCopy = [...filterProducts];
+    // Modified sortProduct function to accept products as parameter
+    const sortProducts = (productsToSort) => {
+        let productsCopy = [...productsToSort];
 
         switch(sortType){
             case 'low-high':
-                setFilterProducts(filterProductsCopy.sort((a, b)=> (a.price - b.price)));
-                break;
+                return productsCopy.sort((a, b) => (a.price - b.price));
             case 'high-low':
-                setFilterProducts(filterProductsCopy.sort((a, b)=> (b.price - a.price)));
-                break;
-            
+                return productsCopy.sort((a, b) => (b.price - a.price));
             default:
-                applyFilter();
-                break;
+                return productsCopy;
         }
     }
 
+    // Run applyFilter when filters or sort changes
     useEffect(()=>{
         applyFilter();
-    }, [category, subCategory, search, showSearch])
-
-    useEffect(()=>{
-        sortProduct();
-    }, [sortType ])
+    }, [category, subCategory, search, showSearch, products, sortType])
 
     return (
         <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 border-t'>
@@ -86,7 +77,6 @@ const Collection = () => {
                     <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="" />
 
                 </p>
-
 
                 {/* Category Filter  */}
                 <div className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? ' ' : 'hidden'} sm:block`}>

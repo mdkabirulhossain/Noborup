@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../assets/assets";
 import { toast } from "react-toastify";
+import axios from 'axios';
+// import { products } from "../assets/assets";
 
 
 export const ShopContext = createContext();
@@ -8,10 +9,12 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
     const currency = '$';
     const delivery_fee = 10;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false)
     const [cartItem, setCartItem] = useState({});
+    const [products, setProducts] = useState([]);
    
 
     const addToCart = async (Itemid, size) => {
@@ -80,11 +83,31 @@ const ShopContextProvider = (props) => {
     }
 
 
-
+    
+   const getProductsData = async()=>{
+    try{
+        const response = await axios.get(backendUrl + '/api/product/list');
+        // console.log(response.data); 
+        
+        if(response.data.success){
+            setProducts(response.data.products); 
+        } else {
+            console.log('API returned error:', response.data.message);
+            toast.error(response.data.message);
+        }
+    }catch(error){
+        console.log('API call failed:', error);
+        toast.error(error.message);
+    }
+}
 
     useEffect(()=>{
-        console.log(cartItem)
-    }, [cartItem])
+        getProductsData()
+    }, [])
+
+    // useEffect(()=>{
+    //     console.log(cartItem)
+    // }, [cartItem])
 
     const value = {
         products,
