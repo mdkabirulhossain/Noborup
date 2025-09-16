@@ -1,25 +1,45 @@
 import { IoIosEye } from "react-icons/io";
-import { FaUser,FaEyeSlash } from "react-icons/fa";
-import { useState } from 'react';
+import { FaUser, FaEyeSlash } from "react-icons/fa";
+import { useContext, useState } from 'react';
 import { Link } from 'react-router';
-
+import { ShopContext } from "../context/ShopContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [data, setData] = useState({
-        email:"",
-        password:""
+        email: "",
+        password: ""
     })
-    const onChangeHandler = (event)=>{
+    const { token, setTokn, navigate, backendUrl } = useContext(ShopContext)
+
+    const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setData(data =>({...data, [name]:value}))
+        setData(data => ({ ...data, [name]: value }))
 
     }
 
-    const handleSubmit = (event)=>{
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        try {
+            const response = await axios.post(backendUrl + '/api/user/login', data);
+            if (response.data.success) {
+                setTokn(response.data.token);
+                localStorage.setItem('token', token);
+                toast.success(response.data.message);
+                navigate('/');
+                
+            } else {
+                toast.error(response.data.message)
+            }
+
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
     }
     // console.log(data)
     return (
@@ -45,20 +65,20 @@ const Login = () => {
                                 <span className="label-text">Password</span>
                             </label>
                             <div className='flex justify-between items-center relative'>
-                                <input type={showPassword? "text" : 'password'} placeholder="password" onChange={onChangeHandler} name='password' value={data.password} className="border py-1 pl-2 rounded-md input-bordered w-full outline-none" required />
+                                <input type={showPassword ? "text" : 'password'} placeholder="password" onChange={onChangeHandler} name='password' value={data.password} className="border py-1 pl-2 rounded-md input-bordered w-full outline-none" required />
                                 <div className='absolute right-2 cursor-pointer' >
-                                   {
-                                    showPassword? 
-                                    <FaEyeSlash onClick={()=>setShowPassword(false)}/>
-                                    
-                                    :
-                                    <IoIosEye onClick={()=>setShowPassword(true)}/>
-                                   }
-                                    
+                                    {
+                                        showPassword ?
+                                            <FaEyeSlash onClick={() => setShowPassword(false)} />
+
+                                            :
+                                            <IoIosEye onClick={() => setShowPassword(true)} />
+                                    }
+
                                 </div>
                             </div>
                             <label className="label">
-                                
+
                                 <Link to='/forgotPassword' href="#" className="label-text-alt link link-hover">Forgot password?</Link>
                             </label>
                         </div>
@@ -67,7 +87,7 @@ const Login = () => {
                         </div>
                         <p className='text-sm'>Don't have account?<Link to='/signUp'><span className='text-orange-500 hover:underline'> Sign Up</span></Link> </p>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
