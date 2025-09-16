@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { IoIosEye } from "react-icons/io";
 import { FaUser,FaEyeSlash } from "react-icons/fa";
 import { useState } from 'react';
@@ -18,7 +18,7 @@ const Signup = () => {
         password:"",
     })
 
-    const {token, setTokn, navigate, backendUrl} = useContext(ShopContext)
+    const {token, setToken, navigate, backendUrl} = useContext(ShopContext)
 
     const onChangeHandler = (event)=>{
         const name = event.target.name;
@@ -32,9 +32,8 @@ const Signup = () => {
         try{
             const response = await axios.post(backendUrl +'/api/user/register', data);
             if(response.data.success){
-                setTokn(response.data.token);
+                setToken(response.data.token);
                 localStorage.setItem('token', token);
-                navigate('/');
                 toast.success(response.data.message);
             }else{
                 toast.error(response.data.message)
@@ -46,6 +45,11 @@ const Signup = () => {
         }
     }
     // console.log(data)
+    useEffect(()=>{
+        if(token){
+            navigate('/')
+        }
+    }, [token])
     return (
         <div className="hero bg-base-200 mt-[20%] sm:mt-[5%] flex justify-center">
             <div className="hero-content">

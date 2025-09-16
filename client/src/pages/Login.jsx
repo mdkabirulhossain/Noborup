@@ -1,6 +1,6 @@
 import { IoIosEye } from "react-icons/io";
 import { FaUser, FaEyeSlash } from "react-icons/fa";
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ const Login = () => {
         email: "",
         password: ""
     })
-    const { token, setTokn, navigate, backendUrl } = useContext(ShopContext)
+    const { token, setToken, navigate, backendUrl } = useContext(ShopContext)
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -23,25 +23,37 @@ const Login = () => {
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post(backendUrl + '/api/user/login', data);
-            if (response.data.success) {
-                setTokn(response.data.token);
-                localStorage.setItem('token', token);
-                toast.success(response.data.message);
-                navigate('/');
-                
-            } else {
-                toast.error(response.data.message)
-            }
-
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message)
+    event.preventDefault();
+    try {
+        const response = await axios.post(backendUrl + '/api/user/login', data);
+        
+        if (response.data.success) {
+            const receivedToken = response.data.token;
+            
+            // Update state
+            setToken(receivedToken);
+            
+            // Save to localStorage using the received token
+            localStorage.setItem('token', receivedToken);
+            
+            console.log(receivedToken);
+            
+        } else {
+            toast.error(response.data.message);
         }
+        
+    } catch (error) {
+        console.log(error);
+        toast.error(error.message);
     }
+}
     // console.log(data)
+    useEffect(() => {
+        if (token) {
+            navigate('/')
+        }
+    }, [token])
+
     return (
         <div className="hero bg-base-200 mt-[20%] sm:mt-[5%] flex justify-center">
             <div className="hero-content ">

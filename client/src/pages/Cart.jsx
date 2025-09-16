@@ -4,11 +4,11 @@ import { MdDelete } from "react-icons/md";
 import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import { Link } from 'react-router';
-import { products } from '../assets/assets';
+// import { products } from '../assets/assets';
 import CartTotal from '../components/CartTotal';
 
 const Cart = () => {
-    const { product_items, currency, cartItem, updateQuantity, navigate } = useContext(ShopContext);
+    const { products, currency, cartItem, updateQuantity, navigate } = useContext(ShopContext);
     const [cartData, setCartData] = useState([])
 
     useEffect(() => {
@@ -41,11 +41,11 @@ const Cart = () => {
                         const productData = products.find(product => product._id === item._id);
 
                         return (
-                            <div key={item.id} >
+                            <div key={item._id} >
 
                                 <div className='flex justify-between items-center gap-5 '>
                                     <div className='flex gap-5'>
-                                        <img className='w-16 sm:20' src={productData.image[0]} alt="" />
+                                        <img className='w-16 sm:20' src={productData?.image[0]} alt="" />
                                         <div className='md:min-w-xl'>
                                             <p className='text-xs sm:text-lg font-medium'>{productData.name}</p>
                                             <div className='flex items-center gap-5 mt-2'>
