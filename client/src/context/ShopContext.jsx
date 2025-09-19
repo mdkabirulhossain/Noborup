@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from 'axios';
-import {useNavigate} from 'react-router'
+import { useNavigate } from 'react-router'
 // import { products } from "../assets/assets";
 
 
@@ -19,12 +19,12 @@ const ShopContextProvider = (props) => {
     const [token, setToken] = useState('');
 
     const navigate = useNavigate();
-   
+
 
     const addToCart = async (itemId, size) => {
         //using structuredclone to copy data
         let cartData = structuredClone(cartItem);
-        if(!size){
+        if (!size) {
             toast.error("Select product size");
             return;
         }
@@ -41,11 +41,11 @@ const ShopContextProvider = (props) => {
 
         setCartItem(cartData);
 
-        if(token){
-            try{
-                await axios.post(backendUrl + '/api/cart/add', {itemId, size}, {headers: {token}})
+        if (token) {
+            try {
+                await axios.post(backendUrl + '/api/cart/add', { itemId, size }, { headers: { token } })
 
-            }catch(error){
+            } catch (error) {
                 console.log(error);
                 toast.error(error.message)
             }
@@ -54,77 +54,100 @@ const ShopContextProvider = (props) => {
 
 
     //product remove from the cart only when quantity is 0
-    const updateQuantity = async(itemId, size, quantity) =>{
+    const updateQuantity = async (itemId, size, quantity) => {
         let cartData = structuredClone(cartItem);
 
         cartData[itemId][size] = quantity;
         setCartItem(cartData);
+
+        if (token) {
+            try {
+                await axios.post(backendUrl + '/api/cart/update', { itemId, size, quantity }, { headers: { token } })
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message)
+            }
+        }
     }
 
-    const getCartCount = () =>{
+    const getCartCount = () => {
         let totalCount = 0;
-        for(const items in cartItem){
-            for(const item in cartItem[items]){
-                try{
-                    if(cartItem[items][item] > 0){
+        for (const items in cartItem) {
+            for (const item in cartItem[items]) {
+                try {
+                    if (cartItem[items][item] > 0) {
                         totalCount += cartItem[items][item];
                     }
-                } catch(error){
+                } catch (error) {
                     console.log(error)
                 }
-                
+
             }
         }
         return totalCount;
     }
 
-    const getCartAmount = () =>{
+    const getCartAmount = () => {
         let totalAmount = 0;
-        for(const items in cartItem){
-            let itemInfo = products.find(product =>product._id === items);
-            for(const item in cartItem[items]){
-                try{
-                    if(cartItem[items][item] > 0){
+        for (const items in cartItem) {
+            let itemInfo = products.find(product => product._id === items);
+            for (const item in cartItem[items]) {
+                try {
+                    if (cartItem[items][item] > 0) {
                         totalAmount += itemInfo.price * cartItem[items][item]
                     }
-                } catch(error){
+                } catch (error) {
                     console.log("Get Cart Amount error")
                 }
             }
         }
         return totalAmount;
-        
+
     }
 
 
-    
-   const getProductsData = async()=>{
-    try{
-        const response = await axios.get(backendUrl + '/api/product/list');
-        // console.log(response.data); 
-        
-        if(response.data.success){
-            setProducts(response.data.products); 
-        } else {
-            console.log('API returned error:', response.data.message);
-            toast.error(response.data.message);
+
+    const getProductsData = async () => {
+        try {
+            const response = await axios.get(backendUrl + '/api/product/list');
+            // console.log(response.data); 
+
+            if (response.data.success) {
+                setProducts(response.data.products);
+            } else {
+                console.log('API returned error:', response.data.message);
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            console.log('API call failed:', error);
+            toast.error(error.message);
         }
-    }catch(error){
-        console.log('API call failed:', error);
-        toast.error(error.message);
     }
-}
 
-    useEffect(()=>{
+    const getUserCart = async(token) =>{
+        try{
+            const response = await axios.post(backendUrl +'/api/cart/get', {}, {headers:{token}})
+            if(response.data.success){
+                setCartItem(response.data.cartData)
+            }
+
+        }catch(error){
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+
+    useEffect(() => {
         getProductsData()
     }, [])
 
     // useEffect(()=>{
     //     console.log(cartItem)
     // }, [cartItem])
-    useEffect(()=>{
-        if(!token && localStorage.getItem('token')){
-            setToken(localStorage.getItem('token'))
+    useEffect(() => {
+        if (!token && localStorage.getItem('token')) {
+            setToken(localStorage.getItem('token'));
+            getUserCart(localStorage.getItem('token'))
         }
     }, [])
 
@@ -132,11 +155,11 @@ const ShopContextProvider = (props) => {
         products,
         currency,
         delivery_fee,
-        search, 
+        search,
         setSearch,
         showSearch,
         setShowSearch,
-        addToCart, 
+        addToCart,
         cartItem,
         setCartItem,
         updateQuantity,
@@ -149,9 +172,9 @@ const ShopContextProvider = (props) => {
     }
 
     return (
-        <ShopContext.Provider value={value}> 
+        <ShopContext.Provider value={value}>
             {props.children}
-        </ShopContext.Provider> 
+        </ShopContext.Provider>
     )
 }
 
