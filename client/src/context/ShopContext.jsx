@@ -21,33 +21,43 @@ const ShopContextProvider = (props) => {
     const navigate = useNavigate();
    
 
-    const addToCart = async (Itemid, size) => {
+    const addToCart = async (itemId, size) => {
         //using structuredclone to copy data
         let cartData = structuredClone(cartItem);
         if(!size){
             toast.error("Select product size");
             return;
         }
-        if (cartData[Itemid]) {
-            if (cartData[Itemid][size]) {
-                cartData[Itemid][size] += 1;
+        if (cartData[itemId]) {
+            if (cartData[itemId][size]) {
+                cartData[itemId][size] += 1;
             } else {
-                cartData[Itemid][size] = 1;
+                cartData[itemId][size] = 1;
             }
         } else {
-            cartData[Itemid] = {};
-            cartData[Itemid][size] = 1;
+            cartData[itemId] = {};
+            cartData[itemId][size] = 1;
         }
 
         setCartItem(cartData);
+
+        if(token){
+            try{
+                await axios.post(backendUrl + '/api/cart/add', {itemId, size}, {headers: {token}})
+
+            }catch(error){
+                console.log(error);
+                toast.error(error.message)
+            }
+        }
     }
 
 
     //product remove from the cart only when quantity is 0
-    const updateQuantity = async(Itemid, size, quantity) =>{
+    const updateQuantity = async(itemId, size, quantity) =>{
         let cartData = structuredClone(cartItem);
 
-        cartData[Itemid][size] = quantity;
+        cartData[itemId][size] = quantity;
         setCartItem(cartData);
     }
 
