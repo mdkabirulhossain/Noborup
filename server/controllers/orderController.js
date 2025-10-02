@@ -3,16 +3,16 @@ import userModel from "../models/userModel.js";
 
 
 // Placing orders using Cash on Delivery (COD) Methon
-const placeOrder = async(req, res) =>{
-    try{
-        const {userId, items, amount, address} = req.body;
+const placeOrder = async (req, res) => {
+    try {
+        const { userId, items, amount, address } = req.body;
 
-        const orderData ={
+        const orderData = {
             userId,
             items,
             address,
             amount,
-            paymentMethod:"COD",
+            paymentMethod: "COD",
             payment: false,
             date: Date.now()
         }
@@ -20,37 +20,45 @@ const placeOrder = async(req, res) =>{
         const newOrder = new orderModel(orderData)
         await newOrder.save()
 
-        await userModel.findByIdAndUpdate(userId, {cartData:{}})
-        res.json({success:true, message:"Order Placed"})
+        await userModel.findByIdAndUpdate(userId, { cartData: {} })
+        res.json({ success: true, message: "Order Placed" })
 
-    }catch(error){
+    } catch (error) {
         console.log(error)
-        res.json({success:false, message:error.message})
+        res.json({ success: false, message: error.message })
     }
 }
 
 
 // Placing orders using Stripe Methon
-const placeOrderStripe = async(req, res) =>{
+const placeOrderStripe = async (req, res) => {
 
 }
 
 
 // All orders data for admin
-const allOrders = async(req, res) =>{
+const allOrders = async (req, res) => {
 
 }
 
 
 // User order data for frontend
-const userOrders = async(req, res) =>{
+const userOrders = async (req, res) => {
+    try {
+        const { userId } = req.body
+        const orders = await orderModel.find({ userId })
+        res.json({ success: true, orders })
 
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
 }
 
 //Update order Status
-const updateOrdersStatus = async(req, res)=>{
+const updateOrdersStatus = async (req, res) => {
 
 }
 
 
-export{placeOrder, placeOrderStripe, allOrders, userOrders, updateOrdersStatus}
+export { placeOrder, placeOrderStripe, allOrders, userOrders, updateOrdersStatus }
