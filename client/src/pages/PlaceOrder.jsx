@@ -70,7 +70,7 @@ const PlaceOrder = () => {
                         toast.error(response.data.message)
                     }
                     break;
-                    
+
                 default:
                     break;
                 
@@ -78,6 +78,7 @@ const PlaceOrder = () => {
 
         }catch(error){
             console.log(error);
+            toast.error(error.message)
         }
     }
 
